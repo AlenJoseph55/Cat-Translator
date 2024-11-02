@@ -20,6 +20,7 @@ function App() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [canTranslate, setCanTranslate] = useState(true);
+  const [Meowblock, setMeowBlock] = useState(true);
 
   useEffect(() => {
     if (isListening && !audioContext) {
@@ -45,10 +46,11 @@ function App() {
         if (!isListening) return;
         
         // Only check for meows if we can translate
-        if (canTranslate) {
+        if (canTranslate && Meowblock) {
           const isMeow = detectMeow(analyzer);
           if (isMeow) {
             handleMeow();
+            setMeowBlock(false);
           }
         }
         
@@ -134,9 +136,10 @@ function App() {
         // Enable translation after 5 seconds
         setTimeout(() => {
           setCanTranslate(true);
-        }, 5000);
+        }, 3000);
       }, 1500);
     }
+      setMeowBlock(true);
   };
 
   return (
