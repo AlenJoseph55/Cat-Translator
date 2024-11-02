@@ -20,6 +20,7 @@ function App() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [lastMeowTime, setLastMeowTime] = useState(0);
+  const [isProcessingMeow, setIsProcessingMeow] = useState(false);
 
   useEffect(() => {
     if (isListening && !audioContext) {
@@ -47,8 +48,10 @@ function App() {
         const currentTime = Date.now();
         const timeSinceLastMeow = currentTime - lastMeowTime;
         
-        // Only check for meows if 5 seconds have passed
-        if (timeSinceLastMeow >= 5000) {
+        // Only check for meows if:
+        // 1. We're not currently processing a meow
+        // 2. It's been at least 5 seconds since the last meow
+        if (!isProcessingMeow && timeSinceLastMeow >= 5000) {
           const isMeow = detectMeow(analyzer);
           if (isMeow) {
             setLastMeowTime(currentTime);
@@ -109,7 +112,8 @@ function App() {
   }, [isThinking]);
 
   const handleMeow = () => {
-    if (isListening) {
+    if (isListening && !isProcessingMeow) {
+      setIsProcessingMeow(true);
       setIsThinking(true);
       setMood('curious');
       setShowSparkles(false);
@@ -130,6 +134,7 @@ function App() {
         setIsThinking(false);
         setMood(getRandomMood());
         setShowSparkles(true);
+        setIsProcessingMeow(false); // Reset processing flag after completion
       }, 1500);
     }
   };
