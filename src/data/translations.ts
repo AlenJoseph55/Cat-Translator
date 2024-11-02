@@ -1,0 +1,22 @@
+export const translations = [
+  "Feed me immediately, peasant! The bottom of my bowl is slightly visible.",
+  "I've solved string theory, but I forgot it while chasing that red dot.",
+  "Your keyboard looks lonely. Let me sit on it.",
+  "I'm not sleeping, I'm practicing advanced meditation techniques.",
+  "The wall demons are back. I must stare at them intensely at 3 AM.",
+  "Your water glass looks perfectly positioned... for knocking over.",
+  "I've decided to start my autobiography: 'Naps: A Life Story'",
+  "The cardboard box is my spaceship, and I'm an intergalactic explorer.",
+  "Your legs make the perfect treadmill when you're trying to sleep.",
+  "I'm conducting important gravity experiments with various objects on high surfaces.",
+  "The red dot conspiracy continues. I'm close to catching it this time.",
+  "Your plants needed redecorating. You're welcome.",
+  "I'm practicing my opera for tonight's 2 AM performance.",
+  "The bathroom must never be entered alone. I shall accompany you.",
+  "Your black clothes needed more of my fur. It's called fashion.",
+  "I've detected a disturbance in the treat container. Investigation needed.",
+  "The birds outside are plotting something. I must observe.",
+  "Your laptop is warm, therefore it is my new bed.",
+  "I'm not running around like crazy, I'm doing CrossFit.",
+  "The empty paper bag contains infinite possibilities."
+];
