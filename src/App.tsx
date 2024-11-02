@@ -73,7 +73,7 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <Header mood={mood} />
         
-        <div className="max-w-md mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 transform hover:scale-[1.01] transition-all relative overflow-hidden">
+        <div className="max-w-md mx-auto bg-white/90 rounded-2xl shadow-xl p-6 transform hover:scale-[1.01] transition-all relative ">
           {showSparkles && (
             <div className="absolute inset-0 pointer-events-none">
               {[...Array(6)].map((_, i) => (
