@@ -9,6 +9,7 @@ import { MoodIndicator } from './components/MoodIndicator';
 import { getRandomMood } from './utils/mood';
 import { preloadImages } from './utils/imagePreloader';
 import type { CatMood } from './utils/mood';
+import { detectMeow } from './utils/audioDetection';
 
 function App() {
   const [isListening, setIsListening] = useState(false);
@@ -16,6 +17,64 @@ function App() {
   const [isThinking, setIsThinking] = useState(false);
   const [mood, setMood] = useState<CatMood>('curious');
   const [showSparkles, setShowSparkles] = useState(false);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
+
+
+  useEffect(() => {
+    if (isListening && !audioContext) {
+      initializeAudio();
+    } else if (!isListening && audioContext) {
+      cleanupAudio();
+    }
+  }, [isListening]);
+
+  const initializeAudio = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const context = new AudioContext();
+      const source = context.createMediaStreamSource(stream);
+      const analyzer = context.createAnalyser();
+      
+      source.connect(analyzer);
+      setAudioContext(context);
+      setMediaStream(stream);
+
+      // Start monitoring for meows
+      const checkAudio = () => {
+        if (!isListening) return;
+        
+        const isMeow = detectMeow(analyzer);
+        if (isMeow) {
+          handleMeow();
+        }
+        
+        requestAnimationFrame(checkAudio);
+      };
+      
+      checkAudio();
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      setIsListening(false);
+    }
+  };
+
+  const cleanupAudio = () => {
+    if (mediaStream) {
+      mediaStream.getTracks().forEach(track => track.stop());
+    }
+    if (audioContext) {
+      audioContext.close();
+    }
+    setAudioContext(null);
+    setMediaStream(null);
+  };
+  
+  useEffect(() => {
+    return () => {
+      cleanupAudio();
+    };
+  }, []);
 
   // Preload images on mount
   useEffect(() => {
