@@ -107,10 +107,10 @@ function App() {
   }, [isThinking]);
 
   const handleMeow = () => {
-    if (isListening && canTranslate) {
+    if (isListening && canTranslate && Meowblock) {
       // Disable translation immediately
       setCanTranslate(false);
-      
+      setMeowBlock(false);
       setIsThinking(true);
       setMood('curious');
       setShowSparkles(false);
@@ -136,6 +136,7 @@ function App() {
         // Enable translation after 5 seconds
         setTimeout(() => {
           setCanTranslate(true);
+          setMeowBlock(true);
         }, 3000);
       }, 1500);
     }
