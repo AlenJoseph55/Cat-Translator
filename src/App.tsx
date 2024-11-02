@@ -19,7 +19,7 @@ function App() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
-
+  const [lastMeowTime, setLastMeowTime] = useState(0);
 
   useEffect(() => {
     if (isListening && !audioContext) {
@@ -44,9 +44,16 @@ function App() {
       const checkAudio = () => {
         if (!isListening) return;
         
-        const isMeow = detectMeow(analyzer);
-        if (isMeow) {
-          handleMeow();
+        const currentTime = Date.now();
+        const timeSinceLastMeow = currentTime - lastMeowTime;
+        
+        // Only check for meows if 5 seconds have passed
+        if (timeSinceLastMeow >= 5000) {
+          const isMeow = detectMeow(analyzer);
+          if (isMeow) {
+            setLastMeowTime(currentTime);
+            handleMeow();
+          }
         }
         
         requestAnimationFrame(checkAudio);
