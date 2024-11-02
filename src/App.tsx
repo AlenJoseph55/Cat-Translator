@@ -19,7 +19,7 @@ function App() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
-  const [isProcessingMeow, setIsProcessingMeow] = useState(false);
+  const [canTranslate, setCanTranslate] = useState(true);
 
   useEffect(() => {
     if (isListening && !audioContext) {
@@ -44,8 +44,8 @@ function App() {
       const checkAudio = () => {
         if (!isListening) return;
         
-        // Only check for meows if we're not currently processing one
-        if (!isProcessingMeow) {
+        // Only check for meows if we can translate
+        if (canTranslate) {
           const isMeow = detectMeow(analyzer);
           if (isMeow) {
             handleMeow();
@@ -105,12 +105,14 @@ function App() {
   }, [isThinking]);
 
   const handleMeow = () => {
-    if (isListening && !isProcessingMeow) {
-      setIsProcessingMeow(true); // Start processing - block any new meows
+    if (isListening && canTranslate) {
+      // Disable translation immediately
+      setCanTranslate(false);
+      
       setIsThinking(true);
       setMood('curious');
       setShowSparkles(false);
-      setTranslation(''); // Clear any previous translation
+      setTranslation('');
       
       const moodChanges = [
         { mood: 'excited', delay: 300 },
@@ -129,9 +131,9 @@ function App() {
         setMood(getRandomMood());
         setShowSparkles(true);
         
-        // Wait 5 seconds before allowing new meows
+        // Enable translation after 5 seconds
         setTimeout(() => {
-          setIsProcessingMeow(false);
+          setCanTranslate(true);
         }, 5000);
       }, 1500);
     }
@@ -142,7 +144,7 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <Header mood={mood} />
         
-        <div className="max-w-md mx-auto bg-white/90 rounded-2xl shadow-xl p-6 transform hover:scale-[1.01] transition-all relative ">
+        <div className="max-w-md mx-auto bg-white/90 rounded-2xl shadow-xl p-6 transform hover:scale-[1.01] transition-all relative">
           {showSparkles && (
             <div className="absolute inset-0 pointer-events-none">
               {[...Array(6)].map((_, i) => (
@@ -181,7 +183,9 @@ function App() {
             {isListening ? (
               <div className="flex items-center justify-center gap-2">
                 <Sparkles className="w-4 h-4 text-purple-500 animate-spin-slow" />
-                <p className="animate-pulse">Listening for meows...</p>
+                <p className="animate-pulse">
+                  {canTranslate ? 'Listening for meows...' : 'Cooling down... Please wait'}
+                </p>
                 <Sparkles className="w-4 h-4 text-purple-500 animate-spin-slow" />
               </div>
             ) : (
