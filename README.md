@@ -49,6 +49,12 @@ Translating Cat Language
 ![alt text](<Screenshot from 2024-11-03 06-15-47.png>)
 Translated Texts
 
+### Project Demo
+# Video
+https://drive.google.com/file/d/1SJT2a_fWLJdjP3G0tI9hAKKJIqE9kIcr/view?usp=sharing
+
+The website takes input of cats sound and translate it to english text
+
 
 ## Team Contributions
 - Roshan Joji: Ui/Ux
