@@ -135,11 +135,12 @@ function App() {
         
         // Enable translation after 5 seconds
         setTimeout(() => {
-          setCanTranslate(true);
+          // setCanTranslate(true);
           setMeowBlock(true);
         }, 3000);
       }, 1500);
     }
+    setCanTranslate(true);
       setMeowBlock(true);
   };
 
