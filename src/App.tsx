@@ -20,7 +20,6 @@ function App() {
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [canTranslate, setCanTranslate] = useState(true);
-  const [Meowblock, setMeowBlock] = useState(true);
 
   useEffect(() => {
     if (isListening && !audioContext) {
@@ -42,22 +41,19 @@ function App() {
       setMediaStream(stream);
 
       // Start monitoring for meows
-      const checkAudio = () => {
-        if (!isListening) return;
-        
-        // Only check for meows if we can translate
-        if (canTranslate && Meowblock) {
-          const isMeow = detectMeow(analyzer);
-          if (isMeow) {
-            handleMeow();
-            setMeowBlock(false);
-          }
+     const checkAudio = () => {
+      if (!isListening) return;
+            if (canTranslate && !isThinking) {
+        const isMeow = detectMeow(analyzer);
+        if (isMeow) {
+          handleMeow();
         }
-        
-        requestAnimationFrame(checkAudio);
-      };
+      }
       
-      checkAudio();
+      requestAnimationFrame(checkAudio);
+    };
+    
+    checkAudio();
     } catch (error) {
       console.error('Error accessing microphone:', error);
       setIsListening(false);
@@ -107,14 +103,14 @@ function App() {
   }, [isThinking]);
 
   const handleMeow = () => {
-    if (isListening && canTranslate && Meowblock) {
+    if (isListening && canTranslate && !isThinking) {
       // Disable translation immediately
       setCanTranslate(false);
-      setMeowBlock(false);
       setIsThinking(true);
       setMood('curious');
       setShowSparkles(false);
       setTranslation('');
+      setIsListening(false);
       
       const moodChanges = [
         { mood: 'excited', delay: 300 },
@@ -135,13 +131,10 @@ function App() {
         
         // Enable translation after 5 seconds
         setTimeout(() => {
-          // setCanTranslate(true);
-          setMeowBlock(true);
+          setCanTranslate(true);
         }, 3000);
       }, 1500);
     }
-    setCanTranslate(true);
-      setMeowBlock(true);
   };
 
   return (
