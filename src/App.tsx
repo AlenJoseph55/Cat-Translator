@@ -133,7 +133,7 @@ function App() {
         // Enable translation after 5 seconds
         setTimeout(() => {
           setCanTranslate(true);
-        }, 1000);
+        }, 100);
       }, 1500);
     }
   };
