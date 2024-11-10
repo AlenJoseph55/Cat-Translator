@@ -47,6 +47,7 @@ function App() {
         const isMeow = detectMeow(analyzer);
         if (isMeow) {
           handleMeow();
+          return;
         }
       }
       
